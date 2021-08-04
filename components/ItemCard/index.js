@@ -25,7 +25,7 @@ const ItemCard = ({id, starlPrice}) => {
         loadData();
         setInterval(async () => {
             await loadData();
-        }, 5000);
+        }, 15000);
     }, []);
 
     const loadAuctionInfo = async () => {
