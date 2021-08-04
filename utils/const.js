@@ -1,0 +1,19 @@
+export const STARL_ADDRESS = {
+    1: "0x8e6cd950ad6ba651f6dd608dc70e5886b1aa6b24",
+    4: "0x5a168798df2b9d84e28958702156b036927a9e29",
+};
+
+export const SATE_AUCTION_ADDRESS = {
+    1: "0x0d45d108f56a2916332a2a0c73e71452e8560260",
+    4: "0xac82ffc8c3fd1171ecdda650670f29fb2e6f02d8"
+};
+
+export const SATE_NFT_ADDRESS = {
+    1: "0x48470fb3fe7108b9e15b2bf7aa15b7adf774d721",
+    4: "0x79efb20b9db4845fcd2d4c60c691ea7208c99232"
+};
+
+export const REWARD_VAULT_ADDRESS = {
+    1: "0xCE968135e84688F48C7e9567103fE249660029DE",
+    4: "0x1cfce979b80ceb452a9af1e8583a6c11eef4a354",
+};

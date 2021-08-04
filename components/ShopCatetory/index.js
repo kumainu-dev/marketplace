@@ -1,0 +1,31 @@
+import React from 'react';
+import {
+    Flex,
+    Text,
+    FormLabel,
+    Checkbox,
+} from '@chakra-ui/react';
+import CustomSwitch from '../CustomSwitch';
+import CustomCheckbox from '../CustomCheckbox';
+
+const ShopCategory = () => {
+    return (
+        <Flex w="400px" h="800px" borderRadius="10px" ml={["auto", "auto", "70px", "150px", "200px"]} p="1.5rem"
+            flexDirection="column"  display={["none", "none", "flex", "flex", "flex"]}
+        >
+            <FormLabel fontSize="32px" fontWeight="400" textColor="#fff" >Marketplace</FormLabel>
+            <Flex justifyContent="space-between" alignItems="center" mt="10px">
+                <FormLabel textColor="#fff" fontSize="16px" fontWeight="400">On sale</FormLabel>
+                <CustomSwitch />
+            </Flex>
+
+            <Flex h="1px" w="100%" bg="rgba(255, 255, 255, 0.1)" mt="10px" alignSelf="center" />
+
+            <Flex flexDirection="column" h="100%" mt="20px" justifyContent="space-between">
+                <Text textColor="#fff" fontWeight="400" cursor="pointer" fontSize="20px">FEATURED</Text>
+            </Flex>
+        </Flex>
+    );
+};
+
+export default ShopCategory;
