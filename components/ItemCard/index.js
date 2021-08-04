@@ -9,7 +9,7 @@ import { ethers } from "ethers";
 import { useRouter } from 'next/router';
 import { useWallet } from 'use-wallet';
 import { getAuction, getHighestBid } from '../../contracts/auction';
-import { getMetadata } from '../../contracts/sate';
+import { getMetadata, getSateInfo } from '../../contracts/sate';
 import { SATE_AUCTION_ADDRESS, SATE_NFT_ADDRESS } from '../../utils/const';
 import { formatNumber } from "../../lib/helper";
 
@@ -19,23 +19,27 @@ const ItemCard = ({id, starlPrice}) => {
     const wallet = useWallet();
     const [tokenInfo, setTokenInfo] = useState({});
     const [price, setPrice] = useState("0");
+    const [resulted, setResulted] = useState(true);
 
     useEffect(async () => {
         loadData();
         setInterval(async () => {
-            await loadHighestBid();
-        }, 15000);
+            await loadData();
+        }, 500);
     }, []);
 
-    const loadHighestBid = async () => {
+    const loadAuctionInfo = async () => {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         if (provider) {
             const network = await provider.getNetwork();
             const bidInfo = await getHighestBid(SATE_AUCTION_ADDRESS[network.chainId], id, provider);
+            const auctionInfo = await getAuction(SATE_AUCTION_ADDRESS[network.chainId], id, provider);
             const highestBidPrice = bidInfo.bid.toString();
             if (parseFloat(highestBidPrice) > parseFloat(price)) {
                 setPrice(highestBidPrice);
             }
+
+            console.log(auctionInfo);
         }
     }
 
@@ -47,7 +51,13 @@ const ItemCard = ({id, starlPrice}) => {
             const auctionInfo = await getAuction(SATE_AUCTION_ADDRESS[network.chainId], id, provider);
             const bidInfo = await getHighestBid(SATE_AUCTION_ADDRESS[network.chainId], id, provider);
             
-            setPrice(auctionInfo.reservePrice > bidInfo.bid ? auctionInfo.reservePrice.toString() : bidInfo.bid.toString());
+            if (auctionInfo.resulted) {
+                const sateInfo = await getSateInfo(SATE_AUCTION_ADDRESS[network.chainId], id, provider);
+                setPrice(sateInfo.st_launchPrice.toString());
+            } else {
+                setPrice(auctionInfo.reservePrice > bidInfo.bid ? auctionInfo.reservePrice.toString() : bidInfo.bid.toString());
+            }
+            setResulted(auctionInfo.resulted);
 
             if (!metadata) return;
             fetch(metadata)
@@ -69,7 +79,8 @@ const ItemCard = ({id, starlPrice}) => {
 
     const handleClick = e => {
         e.preventDefault();
-        router.push(`/buyitem?id=${id}`);
+        const path = resulted ? `https://opensea.io/assets/0x48470fb3fe7108b9e15b2bf7aa15b7adf774d721/${id}` : `/buyitem?id=${id}`;
+        router.push(path);
     }
 
     if (!tokenInfo.name) {

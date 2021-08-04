@@ -13,3 +13,14 @@ export async function getMetadata(nft, tokenId, provider) {
         return "";
     }
 }
+
+export async function getSateInfo(nft, tokenId, provider) {
+    try {
+        const contract = new ethers.Contract(nft, abi, provider);
+        const tokenInfo = await contract.sateInfo(tokenId);
+        return tokenInfo;
+    } catch (e) {
+        console.error(e);
+        return {};
+    }
+}
