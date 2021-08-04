@@ -54,7 +54,7 @@ const ItemCard = ({id, starlPrice}) => {
             if (auctionInfo.resulted) {
                 const sateInfo = await getSateInfo(SATE_NFT_ADDRESS[network.chainId], id, provider);
                 console.log(sateInfo);
-                //setPrice(sateInfo.st_launchPrice.toString());
+                setPrice(sateInfo.st_launchPrice.toString());
             } else {
                 setPrice(auctionInfo.reservePrice > bidInfo.bid ? auctionInfo.reservePrice.toString() : bidInfo.bid.toString());
             }
