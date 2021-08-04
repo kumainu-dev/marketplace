@@ -10,15 +10,13 @@ import { useRouter } from 'next/router';
 import { useWallet } from 'use-wallet';
 import { getAuction, getHighestBid } from '../../contracts/auction';
 import { getMetadata } from '../../contracts/sate';
-import { getWalletAddress } from "../../lib/wallet";
 import { SATE_AUCTION_ADDRESS, SATE_NFT_ADDRESS } from '../../utils/const';
 import { formatNumber } from "../../lib/helper";
 
-const ItemCard = ({id}) => {
+const ItemCard = ({id, starlPrice}) => {
 
     const router = useRouter();
     const wallet = useWallet();
-    const [networkId, setNetworkId] = useState(0);
     const [tokenInfo, setTokenInfo] = useState({});
     const [price, setPrice] = useState("0");
 
@@ -45,7 +43,6 @@ const ItemCard = ({id}) => {
         //if (wallet && wallet.ethereum) {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const network = await provider.getNetwork();
-            setNetworkId(network.chainId);
             const metadata = await getMetadata(SATE_NFT_ADDRESS[network.chainId], id, provider);
             const auctionInfo = await getAuction(SATE_AUCTION_ADDRESS[network.chainId], id, provider);
             const bidInfo = await getHighestBid(SATE_AUCTION_ADDRESS[network.chainId], id, provider);
@@ -106,6 +103,9 @@ const ItemCard = ({id}) => {
                 <Flex alignItems="center">
                     <Image src="item/coin_logo.png" w={["20px", "16px", "16px", "16px", "20px"]} alt="coin logo"></Image>
                     <Text textColor="#FDB32A" fontSize={["15px", "12px", "12px", "12px", "15px"]} fontWeight="500" ml="0.5rem">{formatNumber(parseFloat(_price), 1)} STARL</Text>
+                </Flex>
+                <Flex alignItems="center">
+                    <Text textColor="#FDB32A" fontSize={["15px", "12px", "12px", "12px", "15px"]} fontWeight="500" ml={["24px", "28px"]}>{formatNumber(parseFloat(_price) * starlPrice, 1)} USD</Text>
                 </Flex>
             </Flex>
         </Flex>

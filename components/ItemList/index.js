@@ -1,25 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import  {
     Flex,
     Text,
     FormLabel,
-    Select,
     SimpleGrid,
-    Image,
-    Box,
-    Collapse,
-    useDisclosure,
 } from '@chakra-ui/react';
 import ItemCard from '../ItemCard';
 import SortBy from '../SortbyComponent';
 import CustomSwitch from '../CustomSwitch';
-import CustomCheckbox from '../CustomCheckbox';
+import { getStarlPrice } from '../../lib/helper';
 
 const tokenIds = [16, 17, 18, 11, 12, 13, 14, 15, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const ItemList = () => {
 
-    const { isOpen, onToggle } = useDisclosure();
+    const [price, setPrice] = useState(0);
+
+    useEffect(async () => {
+        const starlPrice = await getStarlPrice();
+        setPrice(starlPrice);
+    }, []);
 
     return (
         <Flex flexDirection="column" w="100%" h="100%" ml={["5rem", "5rem", "2rem", "3rem", "4rem"]} mr={["1rem", "1rem", "2rem", "1rem", "auto"]}>
@@ -32,26 +32,6 @@ const ItemList = () => {
                     <FormLabel textColor="#fff" fontSize="16px" fontWeight="400">On sale</FormLabel>
                     <CustomSwitch />
                 </Flex>
-                <Box>
-                    <Flex alignItems="center" textColor="rgba(255, 255, 255, 0.5)" cursor="pointer" fontSize="14px" fontWeight="400"><CustomCheckbox/>Care Bears</Flex>
-                    <Flex alignItems="center" textColor="rgba(255, 255, 255, 0.5)" cursor="pointer" fontSize="14px" mt="5px" fontWeight="400"><CustomCheckbox/>Atari</Flex>
-                    <Flex alignItems="center" textColor="rgba(255, 255, 255, 0.5)" cursor="pointer" fontSize="14px" mt="5px" fontWeight="400"><CustomCheckbox/>Smurfs</Flex>
-                </Box>
-                <Collapse in={isOpen} animateOpacity>
-                    <Box>
-                        <Flex alignItems="center" textColor="rgba(255, 255, 255, 0.5)" cursor="pointer" fontSize="14px" mt="5px" fontWeight="400"><CustomCheckbox/>Binance</Flex>
-                        <Flex alignItems="center" textColor="rgba(255, 255, 255, 0.5)" cursor="pointer" fontSize="14px" mt="5px" fontWeight="400"><CustomCheckbox/>CoinMarketCap</Flex>
-                        <Flex alignItems="center" textColor="rgba(255, 255, 255, 0.5)" cursor="pointer" fontSize="14px" mt="5px" fontWeight="400"><CustomCheckbox/>Avenged Sevenfold</Flex>
-                        <Flex alignItems="center" textColor="rgba(255, 255, 255, 0.5)" cursor="pointer" fontSize="14px" mt="5px" fontWeight="400"><CustomCheckbox/>Gemini</Flex>
-                        <Flex alignItems="center" textColor="rgba(255, 255, 255, 0.5)" cursor="pointer" fontSize="14px" mt="5px" fontWeight="400"><CustomCheckbox/>Uken Games</Flex>
-                        <Flex alignItems="center" textColor="rgba(255, 255, 255, 0.5)" cursor="pointer" fontSize="14px" mt="5px" fontWeight="400"><CustomCheckbox/>ZEPETO</Flex>
-                        <Flex alignItems="center" textColor="rgba(255, 255, 255, 0.5)" cursor="pointer" fontSize="14px" mt="5px" fontWeight="400"><CustomCheckbox/>F1 Delta Time</Flex>
-                        <Flex alignItems="center" textColor="rgba(255, 255, 255, 0.5)" cursor="pointer" fontSize="14px" mt="5px" fontWeight="400"><CustomCheckbox/>Pranksy NFT Boxes</Flex>
-                        <Flex alignItems="center" textColor="rgba(255, 255, 255, 0.5)" cursor="pointer" fontSize="14px" mt="5px" fontWeight="400"><CustomCheckbox/>Deadmau5</Flex>
-                        <Flex alignItems="center" textColor="rgba(255, 255, 255, 0.5)" cursor="pointer" fontSize="14px" mt="5px" fontWeight="400"><CustomCheckbox/>FTX</Flex>
-                    </Box>
-                </Collapse>
-                <Flex as="button" onClick={onToggle} border="none" fontSize="12px" mt="0.5rem">{isOpen ? '< Show less' : '> Show more'}</Flex>
             </Flex>
             <Flex w="100%" mt="1.5rem" flexDirection={["column", "column", "row", "row", "row"]} justifyContent="space-between">
                 <Flex alignItems="center">
@@ -68,7 +48,7 @@ const ItemList = () => {
                 </Flex>
             </Flex>
             <SimpleGrid columns={["1", "2", "2", "3", "4"]} spacing={5} m="20px 0 30px 0">
-                {tokenIds.map(id => <ItemCard id={id} key={id} />)}
+                {tokenIds.map(id => <ItemCard id={id} key={id} starlPrice={price} />)}
             </SimpleGrid>
         </Flex>
     ); 
